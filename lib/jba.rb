@@ -262,7 +262,9 @@ module Jba
         @records.map { |data|
           data.dump + CRLF
         }.join +
-        @trailer.dump + CRLF + EOF # EOF could be optional
+        @trailer.dump + CRLF +
+        EndRecord.new.dump + CRLF +
+        EOF # EOF could be optional
     end
 
   private

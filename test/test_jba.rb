@@ -118,7 +118,7 @@ class JbaTestCase < Test::Unit::TestCase
     obj = Jba::GeneralTransfer.new(
       :customer_code => 1,
       :customer_name => '2',
-      :transfer_mmdd => Time.now.strftime("%m%d"),
+      :transfer_mmdd => '0224',
       :bank_code => 3,
       :branch_code => 4,
       :account_type => 1,
@@ -126,7 +126,8 @@ class JbaTestCase < Test::Unit::TestCase
     )
     # empty data
     assert_equal "121000000000012                                       02240003               004               10000005                 \r\n" +
-                 "8000000000000000000                                                                                                     \r\n\x1A", obj.dump
+                 "8000000000000000000                                                                                                     \r\n" +
+                 "9                                                                                                                       \r\n\x1A", obj.dump
 
     # initial record
     obj.add(
@@ -139,9 +140,10 @@ class JbaTestCase < Test::Unit::TestCase
       :operation_type => 0,
       :transaction_type => 7,
     )
-    assert_equal  "121000000000012                                       02240003               004               10000005                 \r\n" +
-                  "20001               002               0000400000035                             00000000060                    7        \r\n" +
-                  "8000001000000000006                                                                                                     \r\n\x1A", obj.dump
+    assert_equal "121000000000012                                       02240003               004               10000005                 \r\n" +
+                 "20001               002               0000400000035                             00000000060                    7        \r\n" +
+                 "8000001000000000006                                                                                                     \r\n" +
+                 "9                                                                                                                       \r\n\x1A", obj.dump
 
     # same record
     obj.add(
@@ -154,10 +156,11 @@ class JbaTestCase < Test::Unit::TestCase
       :operation_type => 0,
       :transaction_type => 7,
     )
-    assert_equal  "121000000000012                                       02240003               004               10000005                 \r\n" +
-                  "20001               002               0000400000035                             00000000060                    7        \r\n" +
-                  "20001               002               0000400000035                             00000000060                    7        \r\n" +
-                  "8000002000000000012                                                                                                     \r\n\x1A", obj.dump
+    assert_equal "121000000000012                                       02240003               004               10000005                 \r\n" +
+                 "20001               002               0000400000035                             00000000060                    7        \r\n" +
+                 "20001               002               0000400000035                             00000000060                    7        \r\n" +
+                 "8000002000000000012                                                                                                     \r\n" +
+                 "9                                                                                                                       \r\n\x1A", obj.dump
 
     # another record
     obj.add(
@@ -176,10 +179,11 @@ class JbaTestCase < Test::Unit::TestCase
       :transaction_type => 7,
       :recipient_data_type => 'X',
     )
-    assert_equal  "121000000000012                                       02240003               004               10000005                 \r\n" +
-                  "20001               002               0000400000035                             00000000060                    7        \r\n" +
-                  "20001               002               0000400000035                             00000000060                    7        \r\n" +
-                  "20001¼Þ¸            002¼Ý¼ÞÕ¸         1234400000035                             00000803150ABC       DEF       7X       \r\n" +
-                  "8000003000000080327                                                                                                     \r\n\x1A", obj.dump
+    assert_equal "121000000000012                                       02240003               004               10000005                 \r\n" +
+                 "20001               002               0000400000035                             00000000060                    7        \r\n" +
+                 "20001               002               0000400000035                             00000000060                    7        \r\n" +
+                 "20001¼Þ¸            002¼Ý¼ÞÕ¸         1234400000035                             00000803150ABC       DEF       7X       \r\n" +
+                 "8000003000000080327                                                                                                     \r\n" +
+                 "9                                                                                                                       \r\n\x1A", obj.dump
   end
 end
