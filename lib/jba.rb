@@ -257,14 +257,14 @@ module Jba
       @trailer.total_amount += data.amount.to_i
     end
 
-    def dump
+    def dump(opt = {})
       @header.dump + CRLF +
         @records.map { |data|
           data.dump + CRLF
         }.join +
         @trailer.dump + CRLF +
         EndRecord.new.dump + CRLF +
-        EOF # EOF could be optional
+        (opt[:eof] ? EOF : '') # EOF could be optional
     end
 
   private

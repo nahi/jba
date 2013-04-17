@@ -127,7 +127,18 @@ class JbaTestCase < Test::Unit::TestCase
     # empty data
     assert_equal "121000000000012                                       02240003               004               10000005                 \r\n" +
                  "8000000000000000000                                                                                                     \r\n" +
-                 "9                                                                                                                       \r\n\x1A", obj.dump
+                 "9                                                                                                                       \r\n", obj.dump
+    # EOF
+    assert_equal "121000000000012                                       02240003               004               10000005                 \r\n" +
+                 "8000000000000000000                                                                                                     \r\n" +
+                 "9                                                                                                                       \r\n\x1A", obj.dump(:eof => true)
+    assert_equal "121000000000012                                       02240003               004               10000005                 \r\n" +
+                 "8000000000000000000                                                                                                     \r\n" +
+                 "9                                                                                                                       \r\n", obj.dump(:eof => false)
+    assert_equal "121000000000012                                       02240003               004               10000005                 \r\n" +
+                 "8000000000000000000                                                                                                     \r\n" +
+                 "9                                                                                                                       \r\n", obj.dump
+
 
     # initial record
     obj.add(
@@ -143,7 +154,7 @@ class JbaTestCase < Test::Unit::TestCase
     assert_equal "121000000000012                                       02240003               004               10000005                 \r\n" +
                  "20001               002               0000400000035                             00000000060                    7        \r\n" +
                  "8000001000000000006                                                                                                     \r\n" +
-                 "9                                                                                                                       \r\n\x1A", obj.dump
+                 "9                                                                                                                       \r\n", obj.dump
 
     # same record
     obj.add(
@@ -160,7 +171,7 @@ class JbaTestCase < Test::Unit::TestCase
                  "20001               002               0000400000035                             00000000060                    7        \r\n" +
                  "20001               002               0000400000035                             00000000060                    7        \r\n" +
                  "8000002000000000012                                                                                                     \r\n" +
-                 "9                                                                                                                       \r\n\x1A", obj.dump
+                 "9                                                                                                                       \r\n", obj.dump
 
     # another record
     obj.add(
@@ -184,6 +195,6 @@ class JbaTestCase < Test::Unit::TestCase
                  "20001               002               0000400000035                             00000000060                    7        \r\n" +
                  "20001¼Þ¸            002¼Ý¼ÞÕ¸         1234400000035                             00000803150ABC       DEF       7X       \r\n" +
                  "8000003000000080327                                                                                                     \r\n" +
-                 "9                                                                                                                       \r\n\x1A", obj.dump
+                 "9                                                                                                                       \r\n", obj.dump
   end
 end
